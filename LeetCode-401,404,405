@@ -1,0 +1,61 @@
+class Solution {
+/*
+  二进制手表顶部有 4 个 LED 代表 小时（0-11），底部的 6 个 LED 代表 分钟（0-59）。每个 LED 代表一个 0 或 1，最低位在右侧。
+*/
+  public List<String> readBinaryWatch(int turnedOn) {
+    List<String> ans = new ArrayList<>();
+    for(int h = 0; h < 12; h++) {
+      for(int m = 0; m < 60; m++) {
+        if(Integer.bitCount(h) + Integer.bitCount(m) == turnedOn) {
+          ans.add(h + ":" + (m < 10 ? "0" : "") + m);
+        }
+      }
+    }
+    return ans;
+  }
+/*
+404.左叶子之和
+给定二叉树的根节点 root ，返回所有左叶子之和。
+*/
+  public int sumOfLeftLeaves(TreeNode root) {
+    return root == null ? 0 : dfs(root);
+  }
+  public int dfs(TreeNode root) {
+    int ans = 0;
+    if(root.left != null) {
+      ans += isLeafNode(root.left) ? root.left.val : dfs(root.left);
+    }
+    if(root.right != null && !isLeafNode(root.right)) {
+      ans += dfs(root.right);
+    }
+    return ans;
+  }
+  public boolean isLeafNode(TreeNode root) {
+    return root.left == null && root.right == null;
+  }
+/*
+405.数字转换为十六进制数
+给定一个整数，编写一个算法将这个数转换为十六进制数。对于负整数，我们通常使用 补码运算 方法。
+注意:
+十六进制中所有字母(a-f)都必须是小写。
+十六进制字符串中不能包含多余的前导零。如果要转化的数为0，那么以单个字符'0'来表示；对于其他情况，十六进制字符串中的第一个字符将不会是0字符。 
+给定的数确保在32位有符号整数范围内。
+不能使用任何由库提供的将数字直接转换或格式化为十六进制的方法。
+*/
+  public String toHex(int num) {
+    if(num == 0) {
+      return "0";
+    }
+    StringBuilder sb = new StringBuilder();
+    while(num != 0) {
+      int u = num & 15;
+      char c = (char)(u + '0');
+      if(u >= 10) {
+        c = (char)(u - 10 + 'a');
+      }
+      sb.append(c);
+      num >>>= 4;
+    }
+    return sb.reverse().toString();
+  }
+}
